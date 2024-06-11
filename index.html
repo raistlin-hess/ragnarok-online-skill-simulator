@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RO Skill Cast Simulator</title>
+  <link rel="stylesheet" type="text/css" href="assets/ragnarokOnline.css">
+  <link rel="stylesheet" type="text/css" href="assets/ro-site.css">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "yaml": "https://unpkg.com/yaml@^2/browser"
+      }
+    }
+  </script>
+  <script src="./index.mjs" type="module" async></script>
+</head>
+
+<body>
+  <div>
+    <section id="stats-panel">
+      <header>
+        <button></button>
+        <span>Status</span>
+        <input type="checkbox">
+      </header>
+
+      <main>
+        <article>
+          <div>
+            <label for="int">Int</label>
+            <input id="int" type="number" min="1" max="999" value="112">
+          </div>
+          <div>
+            <label for="dex">Dex</label>
+            <input id="dex" type="number" min="1" max="999" value="94">
+          </div>
+        </article>
+      </main>
+
+      <footer></footer>
+    </section>
+  </div>
+
+  <div>
+    <section>
+      <header>
+        <button></button>
+        <span>Skill Selection</span>
+        <input type="checkbox">
+      </header>
+
+      <main>
+        <article>
+          <div>
+            <label for="skill-select">Skill</label>
+            <img id="skill-icon" src="" width="24" height="24" hidden></img>
+            <select id="skill-select" required>
+              <option>Loading...</option>
+            </select>
+          </div>
+          <div>
+            <label for="skill-level">Level</label>
+            <!-- Max level controlled by Skill DB -->
+            <input id="skill-level" type="number" min="1" max="10" maxlength="2" value="1">
+          </div>
+        </article>
+      </main>
+
+      <footer></footer>
+    </section>
+
+    <section>
+      <header>
+        <button></button>
+        <span>Skill Metadata</span>
+        <input type="checkbox" checked>
+      </header>
+      <main>
+        <article>
+          <textarea id="skill-metadata" cols="30" rows="10" readonly></textarea>
+        </article>
+      </main>
+      <footer></footer>
+    </section>
+  </div>
+
+  <br>
+  <hr>
+  <br>
+
+  <div>
+    <button id="cast-button">Cast!</button>
+  </div>
+
+  <div>
+    <section id="results-panel">
+      <header>
+        <button></button>
+        <span>Results</span>
+      </header>
+
+      <main>
+        <article>
+          <div>
+            <label for="var-cast-time">Variable Cast Time</label>
+            <input id="var-cast-time" value="?" readonly disabled>
+            <label>seconds</label>
+          </div>
+          <div>
+            <label for="fixed-cast-time">Fixed Cast Time</label>
+            <input id="fixed-cast-time" value="?" readonly disabled>
+            <label>seconds</label>
+          </div>
+          <br>
+
+          <div>
+            <label for="final-cast-time">Total Cast Time</label>
+            <input id="final-cast-time" value="?" readonly disabled>
+            <label>seconds</label>
+          </div>
+        </article>
+
+        <article style="display: flex; flex-direction: column; width: 9em;">
+          <span id="skill-name" class="hidden" style="pointer-events: none;" readonly>&nbsp;</span>
+          <progress id="skill-progress" class="hidden"></progress>
+          <img id="job-gif" height="100" width="auto" src="assets/jobs/Novice.png"
+            onerror="this.src='assets/jobs/Novice.png'" />
+        </article>
+
+      </main>
+
+      <footer></footer>
+    </section>
+  </div>
+</body>
+
+</html>
