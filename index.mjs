@@ -10,7 +10,16 @@ document.addEventListener('pointerleave', stopAnimation);
 //Add event handlers to all elements that should cause cast time to be re-calculated
 HTML_ELS.skillSelectEl.addEventListener('change', onSkillChange);
 HTML_ELS.castButtonEl.addEventListener('click', startCasting);
-[HTML_ELS.intEl, HTML_ELS.dexEl, HTML_ELS.skillLevelEl]
+[
+  HTML_ELS.intEl,
+  HTML_ELS.dexEl,
+  HTML_ELS.skillLevelEl,
+  HTML_ELS.freeformInputFct,
+  HTML_ELS.freeformInputVct,
+  HTML_ELS.freeformRadioPercentage,
+  HTML_ELS.freeformRadioSeconds
+
+]
   .forEach(el => el.addEventListener('change', updateFinalCastTime));
 
 //Number input validation handlers

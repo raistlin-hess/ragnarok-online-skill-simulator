@@ -13,8 +13,11 @@ const EL_IDS = {
   SKILL_PROGRESS: 'skill-progress',
   SKILL_NAME: 'skill-name',
   JOB_GIF: 'job-gif',
-  ENABLE_FREEFORM_CHECKBOX: 'free-form-checkbox',
   FREEFORM_PANEL: 'freeform-modifiers',
+  FREEFORM_RADIO_PERCENTAGE: 'percentage-check',
+  FREEFORM_RADIO_SECONDS: 'seconds-check',
+  FREEFORM_INP_VCT: 'freeform-vct',
+  FREEFORM_INP_FCT: 'freeform-fct',
 };
 
 export const HTML_ELS = {
@@ -32,6 +35,9 @@ export const HTML_ELS = {
   skillProgressEl: document.getElementById(EL_IDS.SKILL_PROGRESS),
   skillNameEl: document.getElementById(EL_IDS.SKILL_NAME),
   jobEl: document.getElementById(EL_IDS.JOB_GIF),
-  enableFreeFormEl: document.getElementById(EL_IDS.ENABLE_FREEFORM_CHECKBOX),
   freeformPanel: document.getElementById(EL_IDS.FREEFORM_PANEL),
+  freeformRadioPercentage: document.getElementById(EL_IDS.FREEFORM_RADIO_PERCENTAGE),
+  freeformRadioSeconds: document.getElementById(EL_IDS.FREEFORM_RADIO_SECONDS),
+  freeformInputVct: document.getElementById(EL_IDS.FREEFORM_INP_VCT),
+  freeformInputFct: document.getElementById(EL_IDS.FREEFORM_INP_FCT),
 };

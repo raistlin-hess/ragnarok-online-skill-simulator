@@ -1,3 +1,6 @@
+import {HTML_ELS} from './common.mjs';
+
+//TODO: How is this determined? And how is it different than sumFixedCastModifiers?
 const MAX_FIX_CAST_REDUCTION = 0;
 
 export function calculateCastTimeSeconds(skill, skillLevel, playerStats) {
@@ -5,26 +8,42 @@ export function calculateCastTimeSeconds(skill, skillLevel, playerStats) {
   const sumFixedCastModifiers = getFixedCastModifiers();
 
   const baseVarCastTime = getVarCastTime(skill, skillLevel);
-  const sumGearVarCastModifiers = getVarCastModifiersFromGear(); //TODO: Implement
-  const sumVarCastModifiersFromSkills = getVarCastModifiersFromSkills(); //TODO: Implement
-  const sumVarCastModifiers = 0; //TODO: Implement
+  const sumGearVarCastModifiers = getVarCastModifiersFromGear();
+  const sumVarCastModifiersFromSkills = getVarCastModifiersFromSkills();
+  const sumVarCastModifiers = getDirectVarCastModifiers();
 
-  const VCT = (baseVarCastTime - sumVarCastModifiers) * (1 - Math.sqrt((playerStats.dex * 2 + playerStats.int) / 530)) * (1 - sumGearVarCastModifiers / 100) * (1 - sumVarCastModifiersFromSkills / 100);
-  const FCT = (baseFixedCastTime - sumFixedCastModifiers) * (1 - MAX_FIX_CAST_REDUCTION / 100);
+  let totalFct = /* (baseFixedCastTime - sumFixedCastModifiers) * */ (1 - MAX_FIX_CAST_REDUCTION / 100);
+  let totalVct = /* (baseVarCastTime - sumVarCastModifiers) * */ (1 - Math.sqrt((playerStats.dex * 2 + playerStats.int) / 530)) * (1 - sumGearVarCastModifiers / 100) * (1 - sumVarCastModifiersFromSkills / 100);
+
+  //Update calculations directly as seconds, or as percentage
+  const isModifierInSeconds = HTML_ELS.freeformRadioSeconds.checked;
+  if (isModifierInSeconds) {
+    totalFct *= baseFixedCastTime - sumFixedCastModifiers;
+    totalVct *= baseVarCastTime - sumVarCastModifiers;
+  } else {
+    totalFct = totalFct * baseFixedCastTime * (1 - sumFixedCastModifiers);
+    totalVct = totalVct * baseVarCastTime * (1 - sumVarCastModifiers);
+  }
+
+  //Limit floor to 0
+  totalFct = Math.max(0, totalFct);
+  totalVct = Math.max(0, totalVct);
 
   return {
-    variable: VCT,
-    fixed: FCT,
-    total: VCT + FCT,
+    fixed: totalFct,
+    variable: totalVct,
+    total: totalFct + totalVct,
   };
 }
 
 function getVarCastTime(skill, skillLevel) {
   return getCastTimeByProperty('CastTime', skill, skillLevel);
 }
+
 function getFixedCastTime(skill, skillLevel) {
   return getCastTimeByProperty('FixedCastTime', skill, skillLevel);
 }
+
 function getCastTimeByProperty(propertyName, skill, skillLevel) {
   let castTimeMs = 0;
   if (typeof skill[propertyName] == 'number') {
@@ -36,9 +55,13 @@ function getCastTimeByProperty(propertyName, skill, skillLevel) {
   return castTimeMs / 1000;
 }
 
+
+function getDirectVarCastModifiers() {
+  return Number(HTML_ELS.freeformInputVct.value) || 0;
+}
+
 function getFixedCastModifiers() {
-  //TODO: Implement
-  return 0;
+  return Number(HTML_ELS.freeformInputFct.value) || 0;
 }
 
 function getVarCastModifiersFromGear() {
@@ -50,69 +73,3 @@ function getVarCastModifiersFromSkills() {
   //TODO: Implement
   return 0;
 }
-
-const TYPE = {
-  SKILL: 'skill',
-  ENCHANT: 'enchantment',
-};
-const SCALE = {
-  PCT: 'percentage',
-  SEC: 'seconds',
-};
-// Source from: https://irowiki.org/wiki/Skills#Cast_Time
-const modifiers = {
-  '16th Night': {
-    type: TYPE.SKILL,
-    restriction: {
-      job: 'ninja'
-    },
-    variableModifier: {
-      scale: SCALE.PCT,
-      value: -100,
-    },
-    fixedModifer: {
-      scale: SCALE.PCT,
-      value: -100, //ex fixed cast - 100%
-    },
-  },
-  //Automatic Modification Orb (Fixed Cast Time) //TODO: Implement if necessary. Didn't immediately understand
-  'Call Ventus': {
-    type: TYPE.SKILL,
-    restriction: {
-      job: 'sorcerer',
-    },
-    fixedModifier: {
-      scale: SCALE.SEC,
-      value: -1,
-    },
-  },
-  //Fixed Casting Decrease //TODO: Are costume enchantments common?
-  //TODO: Find way to repeat this 10 times OR add another inputEl with formula
-  'Hit Barrel [1 coin]': { //Also called Heat Barrel
-    type: TYPE.SKILL,
-    restriction: {
-      job: 'rebel',
-    },
-    fixedModifer: {
-      scale: SCALE.PCT,
-      value: 5,
-    },
-  },
-  'Hit Barrel [10 coins]': { //Also called Heat Barrel
-    type: TYPE.SKILL,
-    restriction: {
-      job: 'rebel',
-    },
-    fixedModifer: {
-      scale: SCALE.PCT,
-      value: 50,
-    },
-  },
-  'Magic Enchant': {
-    type: TYPE.ENCHANT,
-    fixtedModifier: {
-      scale: SCALE.PCT,
-      value: 1,
-    },
-  }
-};
