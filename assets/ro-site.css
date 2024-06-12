@@ -1,5 +1,43 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+
 body>div {
   display: flex;
-  padding-bottom: 1em;
-  justify-content: space-evenly;
+  padding-bottom: 1rem;
+}
+
+body section {
+  margin: 0.1rem;
+}
+
+#modifier-panel {
+  max-width: 40vw;
+}
+
+#modifier-panel>main {
+  display: flex;
+  flex-direction: column;
+}
+
+/* When Enable Freeform checked, hide the 'ingame-modifiers' panel */
+#modifier-panel>main:has(article input[type=checkbox]:checked) #ingame-modifiers {
+  display: none;
+}
+
+/* When Enable Freeform is NOT checked, hide the 'freeform-modifiers' panel */
+#modifier-panel>main:has(article input[type=checkbox]:not(:checked)) #freeform-modifiers {
+  display: none;
+}
+
+
+#results-panel>footer {
+  flex-direction: row-reverse;
+}
+
+#casting-animation {
+  display: flex;
+  flex-direction: column;
+  width: 9rem;
 }

@@ -1,3 +1,6 @@
+import {HTML_ELS} from './common.mjs';
+
+//TODO: How is this determined? And how is it different than sumFixedCastModifiers?
 const MAX_FIX_CAST_REDUCTION = 0;
 
 export function calculateCastTimeSeconds(skill, skillLevel, playerStats) {
@@ -5,26 +8,42 @@ export function calculateCastTimeSeconds(skill, skillLevel, playerStats) {
   const sumFixedCastModifiers = getFixedCastModifiers();
 
   const baseVarCastTime = getVarCastTime(skill, skillLevel);
-  const sumGearVarCastModifiers = getVarCastModifiersFromGear(); //TODO: Implement
-  const sumVarCastModifiersFromSkills = getVarCastModifiersFromSkills(); //TODO: Implement
-  const sumVarCastModifiers = 0; //TODO: Implement
+  const sumGearVarCastModifiers = getVarCastModifiersFromGear();
+  const sumVarCastModifiersFromSkills = getVarCastModifiersFromSkills();
+  const sumVarCastModifiers = getDirectVarCastModifiers();
 
-  const VCT = (baseVarCastTime - sumVarCastModifiers) * (1 - Math.sqrt((playerStats.dex * 2 + playerStats.int) / 530)) * (1 - sumGearVarCastModifiers / 100) * (1 - sumVarCastModifiersFromSkills / 100);
-  const FCT = (baseFixedCastTime - sumFixedCastModifiers) * (1 - MAX_FIX_CAST_REDUCTION / 100);
+  let totalFct = /* (baseFixedCastTime - sumFixedCastModifiers) * */ (1 - MAX_FIX_CAST_REDUCTION / 100);
+  let totalVct = /* (baseVarCastTime - sumVarCastModifiers) * */ (1 - Math.sqrt((playerStats.dex * 2 + playerStats.int) / 530)) * (1 - sumGearVarCastModifiers / 100) * (1 - sumVarCastModifiersFromSkills / 100);
+
+  //Update calculations directly as seconds, or as percentage
+  const isModifierInSeconds = HTML_ELS.freeformRadioSeconds.checked;
+  if (isModifierInSeconds) {
+    totalFct *= baseFixedCastTime - sumFixedCastModifiers;
+    totalVct *= baseVarCastTime - sumVarCastModifiers;
+  } else {
+    totalFct = totalFct * baseFixedCastTime * (1 - sumFixedCastModifiers);
+    totalVct = totalVct * baseVarCastTime * (1 - sumVarCastModifiers);
+  }
+
+  //Limit floor to 0
+  totalFct = Math.max(0, totalFct);
+  totalVct = Math.max(0, totalVct);
 
   return {
-    variable: VCT,
-    fixed: FCT,
-    total: VCT + FCT,
+    fixed: totalFct,
+    variable: totalVct,
+    total: totalFct + totalVct,
   };
 }
 
 function getVarCastTime(skill, skillLevel) {
   return getCastTimeByProperty('CastTime', skill, skillLevel);
 }
+
 function getFixedCastTime(skill, skillLevel) {
   return getCastTimeByProperty('FixedCastTime', skill, skillLevel);
 }
+
 function getCastTimeByProperty(propertyName, skill, skillLevel) {
   let castTimeMs = 0;
   if (typeof skill[propertyName] == 'number') {
@@ -36,9 +55,13 @@ function getCastTimeByProperty(propertyName, skill, skillLevel) {
   return castTimeMs / 1000;
 }
 
+
+function getDirectVarCastModifiers() {
+  return Number(HTML_ELS.freeformInputVct.value) || 0;
+}
+
 function getFixedCastModifiers() {
-  //TODO: Implement
-  return 0;
+  return Number(HTML_ELS.freeformInputFct.value) || 0;
 }
 
 function getVarCastModifiersFromGear() {

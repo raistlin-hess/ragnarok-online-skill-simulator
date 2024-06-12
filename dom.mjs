@@ -76,11 +76,13 @@ export function updateFinalCastTime() {
 
   const playerStats = getPlayerStats();
   const castTimeSeconds = calculateCastTimeSeconds(selectedSkill, HTML_ELS.skillLevelEl.value, playerStats);
-  const totalCastTimeSeconds = Math.max(0, castTimeSeconds.total.toPrecision(4));
+  const totalCastTimeSeconds = castTimeSeconds.total.toPrecision(4);
 
   HTML_ELS.finalCastEl.value = totalCastTimeSeconds;
-  HTML_ELS.varCastEl.value = Math.max(0, castTimeSeconds.variable.toPrecision(4));
-  HTML_ELS.fixCastEl.value = Math.max(0, castTimeSeconds.fixed.toPrecision(4));
+  HTML_ELS.varCastEl.value = castTimeSeconds.variable.toPrecision(4);
+  HTML_ELS.fixCastEl.value = castTimeSeconds.fixed.toPrecision(4);
+
+  startCasting();
 }
 
 export function startCasting() {
@@ -91,11 +93,8 @@ export function startCasting() {
     clearSkillName();
   }
 
-  //Make sure cast times are calculated
-  updateFinalCastTime();
+  //Get final cast time from readonly element and update progress bar
   const totalCastTimeSeconds = Number(HTML_ELS.finalCastEl.value);
-
-
   const castTimeMs = totalCastTimeSeconds * 1000;
   HTML_ELS.skillProgressEl.value = 0;
   HTML_ELS.skillProgressEl.max = castTimeMs;

@@ -42,6 +42,39 @@
 
       <footer></footer>
     </section>
+
+    <section id="modifier-panel">
+      <header>
+        <button></button>
+        <span>Casting Modifers</span>
+        <input type="checkbox"> <!-- TODO: Change to 'checked' so it auto-hides before commit -->
+      </header>
+
+      <main>
+        <article id="freeform-modifiers">
+          <div>
+            <label for="freeform-vct">Variable Cast Time</label>
+            <input id="freeform-vct" type="number" value="0" min="0">
+          </div>
+          <div>
+            <label for="freeform-fct">Fixed Cast Time</label>
+            <input id="freeform-fct" type="number" value="0" min="0">
+          </div>
+        </article>
+        <article>
+          <input id="percentage-check" type="radio" name="modifier-type" value="percentage" checked>
+          <label for="percentage-check">Percentage</label>
+          <input id="seconds-check" type="radio" name="modifier-type" value="seconds">
+          <label for="seconds-check">Seconds</label>
+        </article>
+      </main>
+
+      <footer>
+        <textarea readonly rows="5"
+          cols="90">Note: If multiple Fixed Cast Time modifiers are active on the player, only the highest will contribute to the formula.
+For example, if a Rebel is afflicted with Sacrament (50%) and uses Hit Barrel with 2 coins (10%), only Sacrament will be applied.</textarea>
+      </footer>
+    </section>
   </div>
 
   <div>
@@ -63,7 +96,7 @@
           </div>
           <div>
             <label for="skill-level">Level</label>
-            <!-- Max level controlled by Skill DB -->
+            <!-- Max level controlled by Skill DB, but 10 is a sane default -->
             <input id="skill-level" type="number" min="1" max="10" maxlength="2" value="1">
           </div>
         </article>
@@ -85,14 +118,6 @@
       </main>
       <footer></footer>
     </section>
-  </div>
-
-  <br>
-  <hr>
-  <br>
-
-  <div>
-    <button id="cast-button">Cast!</button>
   </div>
 
   <div>
@@ -123,16 +148,17 @@
           </div>
         </article>
 
-        <article style="display: flex; flex-direction: column; width: 9em;">
+        <article id="casting-animation">
           <span id="skill-name" class="hidden" style="pointer-events: none;" readonly>&nbsp;</span>
           <progress id="skill-progress" class="hidden"></progress>
           <img id="job-gif" height="100" width="auto" src="assets/jobs/Novice.png"
             onerror="this.src='assets/jobs/Novice.png'" />
         </article>
-
       </main>
 
-      <footer></footer>
+      <footer>
+        <button id="cast-button">Cast !!</button>
+      </footer>
     </section>
   </div>
 </body>
