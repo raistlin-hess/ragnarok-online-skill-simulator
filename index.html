@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RO Skill Cast Simulator</title>
   <link rel="stylesheet" type="text/css" href="assets/ragnarokOnline.css">
-  <link rel="stylesheet" type="text/css" href="assets/ro-site.css">
+  <link rel="stylesheet" type="text/css" href="assets/index.css">
 
   <script type="importmap">
     {
@@ -15,7 +15,7 @@
       }
     }
   </script>
-  <script src="./index.mjs" type="module" async></script>
+  <script src="./script/index.mjs" type="module" async></script>
 </head>
 
 <body>
@@ -31,11 +31,11 @@
         <article>
           <div>
             <label for="int">Int</label>
-            <input id="int" type="number" min="1" max="999" value="112">
+            <input id="int" type="number" min="1" max="999" value="1">
           </div>
           <div>
             <label for="dex">Dex</label>
-            <input id="dex" type="number" min="1" max="999" value="94">
+            <input id="dex" type="number" min="1" max="999" value="1">
           </div>
         </article>
       </main>
@@ -47,7 +47,7 @@
       <header>
         <button></button>
         <span>Casting Modifers</span>
-        <input type="checkbox"> <!-- TODO: Change to 'checked' so it auto-hides before commit -->
+        <input type="checkbox" checked>
       </header>
 
       <main>
